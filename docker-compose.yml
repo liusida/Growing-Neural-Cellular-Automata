@@ -1,0 +1,24 @@
+services:
+  gnca-service:
+    image: gnca
+    volumes:
+      - .:/home/runner
+      - /mnt/data/pip-cache:/pip-cache
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    runtime: nvidia
+    environment:
+      - HTTP_PROXY=http://host.docker.internal:17890
+      - HTTPS_PROXY=http://host.docker.internal:17890
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=all
+      - PIP_CACHE_DIR=/pip-cache
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "2535:8888"
